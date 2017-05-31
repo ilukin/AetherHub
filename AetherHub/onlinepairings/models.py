@@ -13,3 +13,26 @@ class Event(models.Model):
     
     def __str__(self):
         return self.Title
+
+class Document(models.Model):
+    description = models.CharField(max_length=255, blank=True)
+    document = models.FileField(upload_to='documents/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+class LookupField(models.Model):
+    DCI_lookup = models.CharField(max_length=10, blank = True)
+    Table_lookup = models.CharField(max_length=4, blank = True)
+
+class Player(models.Model):
+    id = models.CharField(max_length=10, primary_key=True)
+    currentOpp = models.CharField(max_length=75, default=0)
+    table = models.CharField(max_length=4, default=0)
+    name = models.CharField(max_length=75)
+    eventID = models.CharField(max_length = 20, default = 0)
+    Otable = models.CharField(max_length=4, default=0)
+
+    def __str__(self):
+        return self.id
+    def __repr__(self):
+        return self.id
+

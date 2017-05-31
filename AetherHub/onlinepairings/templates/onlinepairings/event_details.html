@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <p>{{ myevents.Title }}</p>
+    <p>WER path: {{ myevents.WER_path }}</p>
+    <p>Current round: {{ myevents.Current_round }}</p>
+    <div>
+        <!-- <p><a href="{% url 'WER_upload' %}">UPLOAD WER XML</a></p>-->
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="werxml">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" name="form1">Upload</button>
+        </form>
+    </div>
+    <br />
+    <br />
+    <div>
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="playerlookup">
+            {% csrf_token %}
+            {{ lookup_form.as_p }}
+            <button type="submit" name="form2">Search</button>
+        </form>
+    </div>
+    <div>
+        {% if lookup_result.4  %}
+        <p>
+            Table: {{ lookup_result.4 }}<br>
+            Player A: {{ lookup_result.1 }}; Seatings: {{ lookup_result.0 }} <br>
+            Player B: {{ lookup_result.3 }}; Seatings: {{ lookup_result.2 }}
+        </p>
+        {% elif lookup_result.0 %}
+         <p> 
+             Table: {{ lookup_result.0}}<br>
+             Opponent: {{ lookup_result.1 }}
+         </p>
+        {% endif %}
+    </div>
+
+</body>
+</html>

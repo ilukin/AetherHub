@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    {% block content %}
+    <p>{{ myevents.Title }}</p>
+    <p>WER path: {{ myevents.WER_path }}</p>
+    <p>Current round: {{ myevents.Current_round }}</p>
+    <br/>
+    <p>Upload new WER XML</p>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload</button>
+    </form>
+    {% endblock %}
+</body>
+</html>

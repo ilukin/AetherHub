@@ -31,12 +31,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AetherHub\onlinepairings\admin.py" />
-    <Compile Include="AetherHub\onlinepairings\apps.py" />
     <Compile Include="AetherHub\onlinepairings\migrations\__init__.py" />
     <Compile Include="AetherHub\onlinepairings\models.py" />
+    <Compile Include="AetherHub\onlinepairings\forms.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AetherHub\onlinepairings\urls.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="AetherHub\onlinepairings\tests.py" />
     <Compile Include="AetherHub\onlinepairings\views.py" />
     <Compile Include="AetherHub\onlinepairings\__init__.py" />
+    <Compile Include="AetherHub\WER_parser.py" />
     <Compile Include="manage.py" />
     <Compile Include="AetherHub\__init__.py" />
     <Compile Include="AetherHub\settings.py" />
@@ -44,14 +50,19 @@
     <Compile Include="AetherHub\wsgi.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AetherHub\onlinepairings\templates\onlinepairings\event_list.html" />
     <Content Include="AetherHub\onlinepairings\templates\index.html" />
+    <Content Include="AetherHub\onlinepairings\templates\onlinepairings\event_details.html" />
+    <Content Include="AetherHub\onlinepairings\templates\onlinepairings\WER_upload.html" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AetherHub\" />
+    <Folder Include="AetherHub\media\" />
     <Folder Include="AetherHub\onlinepairings\" />
     <Folder Include="AetherHub\onlinepairings\migrations\" />
     <Folder Include="AetherHub\onlinepairings\templates\" />
+    <Folder Include="AetherHub\onlinepairings\templates\onlinepairings\" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="AHenv\">
