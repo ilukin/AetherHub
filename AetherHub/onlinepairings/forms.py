@@ -4,7 +4,7 @@ from AetherHub.onlinepairings.models import Document, LookupField
 class DocumentForm(forms.ModelForm):
     class Meta:
         model = Document
-        fields = ('description', 'document', )
+        fields = ('document', 'current_round')
 
 class PlayerLookupForm(forms.ModelForm):
     class Meta:

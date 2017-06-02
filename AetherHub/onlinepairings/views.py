@@ -28,6 +28,7 @@ def event_details(request, pk):
                 init_obj.save()
                 a = Event.objects.get(pk=pk)
                 a.WER_path = init_obj.document.url
+                a.Current_round = init_obj.current_round
                 a.save()
                 form.save()
                 if myevents.WER_path != '0':

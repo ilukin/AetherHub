@@ -18,6 +18,7 @@ class Document(models.Model):
     description = models.CharField(max_length=255, blank=True)
     document = models.FileField(upload_to='documents/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    current_round = models.CharField(max_length=2, default = 0)
 
 class LookupField(models.Model):
     DCI_lookup = models.CharField(max_length=10, blank = True)
