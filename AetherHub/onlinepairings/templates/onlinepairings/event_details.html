@@ -7,17 +7,29 @@
 </head>
 <body>
     <p>{{ myevents.Title }}</p>
-    <p>WER path: {{ myevents.WER_path }}</p>
-    <p>Current round: {{ myevents.Current_round }}</p>
-    <div>
         <!-- <p><a href="{% url 'WER_upload' %}">UPLOAD WER XML</a></p>-->
-        <form method="post" enctype="multipart/form-data">
-            <input type="hidden" name="action" value="werxml">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" name="form1">Upload</button>
-        </form>
-    </div>
+        {% if user.username == 'snorbert' %}
+            <div>
+                <p>WER path: {{ myevents.WER_path }}</p>
+                <p>Current round: {{ myevents.Current_round }}</p>
+                <form method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="action" value="werxml">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" name="form1">Upload</button>
+                </form>
+            </div>
+            <br />
+            <br />
+            <div>
+                <form method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="action" value="roundupdate">
+                    {% csrf_token %}
+                    {{ control_form.as_p }}
+                    <button type="submit" name="formC">Update round</button>
+                </form>
+            </div>
+        {% endif %}
     <br />
     <br />
     <div>
@@ -29,17 +41,33 @@
         </form>
     </div>
     <div>
-        {% if lookup_result.4  %}
+        {% if lookup_resultT != '0' %}
         <p>
             Table: {{ lookup_result.4 }}<br>
             Player A: {{ lookup_result.1 }}; Seatings: {{ lookup_result.0 }} <br>
             Player B: {{ lookup_result.3 }}; Seatings: {{ lookup_result.2 }}
         </p>
-        {% elif lookup_result.0 %}
-         <p> 
-             Table: {{ lookup_result.0}}<br>
-             Opponent: {{ lookup_result.1 }}
-         </p>
+        {% elif lookup_resultP != '0' %}
+            <table>
+                <tr>
+                    <th>Round</th>
+                    <th>Table</th>
+                    <th>Opponent</th>
+                    <th>Result</th>
+                </tr>
+                {% for item in lookup_resultP %}
+                <tr>
+                    <td>{{item.roundNum}}</td>
+                    <td>{{item.tableNum}}</td>
+                    <td>{{item.opponentName}}</td>
+                    <td>
+                        {% if item.activePlayerWin != '-1' %}
+                        {{item.activePlayerWin}}-{{item.opponentWin}}-{{item.draws}}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
         {% endif %}
     </div>
 

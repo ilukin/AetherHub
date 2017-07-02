@@ -1,5 +1,5 @@
 import xml.etree.cElementTree as etree
-from AetherHub.onlinepairings.models import Player
+from AetherHub.onlinepairings.models import Player, Matches, Event
 
 root = ''
 tree = ''
@@ -28,50 +28,48 @@ def loadplayers(eventid):
         Player.objects.get_or_create(id = child.attrib['id'], name = child.attrib['last'] + ' ' + child.attrib['first'])
         a = Player.objects.get(id = child.attrib['id'])
         a.eventID = eventid
-        a.table = 0
-        a.currentOpp = 0
         a.save()
     for child in seatings_table: #TABLE, dummy: 1 to 4
         tablenum = child.attrib['number']
         seatings_seat = tree.iterfind('./seats/table[@number=' + "'" + tablenum + "'" + ']/seat')
         for item in seatings_seat:
-            a = Player.objects.get(id = item.attrib['player'])
-            a.Otable = tablenum
-            a.save()
+            if a.Otable == 0:
+                a = Player.objects.get(id = item.attrib['player'])
+                a.Otable = tablenum
+                a.save()
 
      #roundstr = r"'<roundnum>'"
      #tree.iterfind('matches/round[@number="1"]/match')
-def loadround(roundstr):
+def loadround(eventid, roundnum):
+    roundstr = "'" + roundnum + "'"
     tablenum = 1
     findtext = './matches/round[@number=' + str(roundstr) +  ']/match'
     matches = tree.iterfind(findtext)
     for child in matches:
-        a = Player.objects.get(id = child.attrib['person'])
-        #a = Players[playerindex(child.attrib['person'])]
-        if child.attrib['outcome']=='3':
-            a.currentOpp = "BYE"
-            a.table = 0
-            a.save()
-        else:
-            b = Player.objects.get(id = child.attrib['opponent'])
-            #b = Players[playerindex(child.attrib['opponent'])]
-            a.table = tablenum
-            b.table = tablenum
-            a.currentOpp = b.name
-            b.currentOpp = a.name
-            a.save()
-            b.save()
-            tablenum = tablenum + 1
+       Matches.objects.get_or_create(activePlayerID = child.attrib['person'],
+                                     opponentID = child.attrib['opponent'],
+                                     opponentName = Player.objects.get(id = child.attrib['opponent']).name,
+                                     eventID = eventid,
+                                     byeCheck = child.attrib['outcome'],
+                                     roundNum = roundnum,
+                                     tableNum = tablenum,)
+       if child.attrib['win'] != '-1':
+           obj = Matches.objects.get(eventID = eventid, roundNum = roundnum, activePlayerID = child.attrib['person'])
+           obj.activePlayerWin = child.attrib['win']
+           obj.opponentWin = child.attrib['loss']
+           obj.draws =  child.attrib['draw']
+           obj.save()
+       tablenum = tablenum + 1
     #print('Load complete')
 
-def findme(DCI):
-    a = Player.objects.get(id = DCI)
-    return (a.table, a.currentOpp)
+def findme(DCI, eventid): #listázza ki adott eventen az összes, játékoshoz tartozó meccset és az eredményét
+    currentmatches = Matches.objects.filter(activePlayerID = DCI, eventID = eventid)
+    return (currentmatches)
 
 def findtables(tablenum, event):
-    players = Player.objects.filter(table = tablenum, eventID = event)
-    a = players[0]
-    b = players[1]
+    currentmatch = Matches.objects.filter(tableNum = tablenum, eventID = event)
+    a = Player.objects.get(id = activePlayerID)
+    b = Player.objects.get(id = opponentID)
     return(a.Otable, a.name, b.Otable, b.name, tablenum)
     
 #print("A " + str(a[0]) + ". asztalon játszol " + a[1] + " ellen")

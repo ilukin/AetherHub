@@ -24,10 +24,13 @@ class LookupField(models.Model):
     DCI_lookup = models.CharField(max_length=10, blank = True)
     Table_lookup = models.CharField(max_length=4, blank = True)
 
+class Controls(models.Model):
+    roundUpdate = models.CharField(max_length = 2)
+
 class Player(models.Model):
     id = models.CharField(max_length=10, primary_key=True)
-    currentOpp = models.CharField(max_length=75, default=0)
-    table = models.CharField(max_length=4, default=0)
+   # currentOpp = models.CharField(max_length=75, default=0)
+   # table = models.CharField(max_length=4, default=0)
     name = models.CharField(max_length=75)
     eventID = models.CharField(max_length = 20, default = 0)
     Otable = models.CharField(max_length=4, default=0)
@@ -37,3 +40,19 @@ class Player(models.Model):
     def __repr__(self):
         return self.id
 
+class Matches(models.Model):
+    activePlayerID = models.CharField(max_length=10)
+    opponentID = models.CharField(max_length=10)
+    opponentName = models.CharField(max_length = 75)
+    activePlayerWin = models.CharField(max_length=1, default = 0)
+    opponentWin=models.CharField(max_length=1, default = 0)
+    draws = models.CharField(max_length = 2, default = 0)
+    eventID=models.CharField(max_length=10)
+    roundNum=models.CharField(max_length=2)
+    tableNum = models.CharField(max_length=4)
+    byeCheck = models.CharField(max_length=1)
+
+    def _get_compound_key(self):
+        return self.eventID + self.numOfRound + self.activePlayerID
+
+    compoundKey = property(_get_compound_key)
