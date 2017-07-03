@@ -25,6 +25,7 @@ class LookupField(models.Model):
     Table_lookup = models.CharField(max_length=4, blank = True)
 
 class Controls(models.Model):
+    seatings = models.BooleanField(default = False)
     roundUpdate = models.CharField(max_length = 2)
 
 class Player(models.Model):

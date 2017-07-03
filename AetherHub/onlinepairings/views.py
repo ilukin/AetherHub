@@ -34,9 +34,6 @@ def event_details(request, pk):
                 a.Current_round = init_obj.current_round
                 a.save()
                 form.save()
-                if myevents.WER_path != '0':
-                    WER_parser.getXML(settings.BASE_DIR + myevents.WER_path)
-                    WER_parser.loadplayers(pk)
                 return redirect('event_details',pk)
 
         if "form2" in request.POST:
@@ -55,9 +52,13 @@ def event_details(request, pk):
                 if control_form.is_valid():
                     init_obj = control_form.save(commit = False)
                     a = init_obj.roundUpdate
+                    flag = init_obj.seatings
                 if myevents.WER_path != '0':
                     WER_parser.getXML(settings.BASE_DIR + myevents.WER_path)
-                    WER_parser.loadround(pk,a)
+                    if a == 0:
+                        WER_parser.loadplayers(pk,flag)
+                    else:
+                        WER_parser.loadround(pk,a)
 
     return render(request, 'onlinepairings/event_details.html', {
         'lookup_form':lookup_form,

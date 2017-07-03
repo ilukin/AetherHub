@@ -14,4 +14,4 @@ class PlayerLookupForm(forms.ModelForm):
 class ControlForm(forms.ModelForm):
     class Meta:
         model = Controls
-        fields = ('roundUpdate',)
+        fields = ('seatings','roundUpdate')
