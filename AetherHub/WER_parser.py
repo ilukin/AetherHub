@@ -49,19 +49,21 @@ def loadround(eventid, roundnum):
     for child in matches:
         if child.attrib['outcome'] != '3': #in any normal case
             Matches.objects.get_or_create(activePlayerID = child.attrib['person'],
-                                         opponentID = child.attrib['opponent'],
-                                         opponentName = Player.objects.get(id = child.attrib['opponent']).name,
-                                         eventID = eventid,
-                                         byeCheck = child.attrib['outcome'],
-                                         roundNum = roundnum,
-                                         tableNum = tablenum,)
+                                          activePlayerName = Player.objects.get(id = child.attrib['person']).name,
+                                          opponentID = child.attrib['opponent'],
+                                          opponentName = Player.objects.get(id = child.attrib['opponent']).name,
+                                          eventID = eventid,
+                                          byeCheck = child.attrib['outcome'],
+                                          roundNum = roundnum,
+                                          tableNum = tablenum,)
             Matches.objects.get_or_create(activePlayerID = child.attrib['opponent'],
-                                         opponentID = child.attrib['person'],
-                                         opponentName = Player.objects.get(id = child.attrib['person']).name,
-                                         eventID = eventid,
-                                         byeCheck = child.attrib['outcome'],
-                                         roundNum = roundnum,
-                                         tableNum = tablenum,)
+                                          activePlayerName = Player.objects.get(id = child.attrib['opponent']).name,
+                                          opponentID = child.attrib['person'],
+                                          opponentName = Player.objects.get(id = child.attrib['person']).name,
+                                          eventID = eventid,
+                                          byeCheck = child.attrib['outcome'],
+                                          roundNum = roundnum,
+                                          tableNum = tablenum,)
             if child.attrib['win'] != '-1':
                obj = Matches.objects.get(eventID = eventid, roundNum = roundnum, activePlayerID = child.attrib['person'])
                objb = Matches.objects.get(eventID = eventid, roundNum = roundnum, activePlayerID = child.attrib['opponent'])
@@ -75,13 +77,14 @@ def loadround(eventid, roundnum):
                objb.save()
         else: #when player has bye
             Matches.objects.get_or_create(activePlayerID = child.attrib['person'],
-                                         opponentID = '0',
-                                         opponentName = 'BYE',
-                                         eventID = eventid,
-                                         byeCheck = child.attrib['outcome'],
-                                         activePlayerWin = '2',
-                                         roundNum = roundnum,
-                                         tableNum = tablenum,)
+                                          activePlayerName = Player.objects.get(id = child.attrib['person']).name,
+                                          opponentID = '0',
+                                          opponentName = 'BYE',
+                                          eventID = eventid,
+                                          byeCheck = child.attrib['outcome'],
+                                          activePlayerWin = '2',
+                                          roundNum = roundnum,
+                                          tableNum = tablenum,)
         tablenum = tablenum + 1
     #print('Load complete')
 

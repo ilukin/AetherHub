@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from AetherHub.onlinepairings.models import Event
-from AetherHub.onlinepairings.models import Player
+from AetherHub.onlinepairings.models import Player, Matches
 from AetherHub.onlinepairings.forms import DocumentForm, PlayerLookupForm, ControlForm
 from AetherHub import WER_parser
 from AetherHub import settings
@@ -17,6 +17,8 @@ def event_details(request, pk):
     #context = {'myevents':myevents, 'form':form, 'lookup_form':lookup_form, 'allplayers':allplayers, 'lookup_result':lookup_result}
     lookup_resultP = '0'
     lookup_resultT = '0'
+    pairings = '0'
+    needpairings = False
     lookup_form = PlayerLookupForm(prefix='lookup_form')
     form = DocumentForm(prefix='form')
     control_form = ControlForm(prefix='control_form')
@@ -55,13 +57,23 @@ def event_details(request, pk):
                     flag = init_obj.seatings
                 if myevents.WER_path != '0':
                     WER_parser.getXML(settings.BASE_DIR + myevents.WER_path)
-                    if a == 0:
+                    if a == '0':
                         WER_parser.loadplayers(pk,flag)
                     else:
                         WER_parser.loadround(pk,a)
+                        obj = Event.objects.get(pk=pk)
+                        obj.Current_round = str(a)
+                        obj.save()                       
+
+        if "pairings" in request.POST:       
+            needpairings=True
+            currentround = Event.objects.get(pk=pk).Current_round
+            pairings = Matches.objects.filter(eventID = pk, roundNum = currentround).order_by('activePlayerName')
 
     return render(request, 'onlinepairings/event_details.html', {
+        'needpairings':needpairings,
         'lookup_form':lookup_form,
+        'pairings':pairings,
         'form':form,
         'control_form':control_form,
         'myevents':myevents,

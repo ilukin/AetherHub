@@ -43,6 +43,7 @@ class Player(models.Model):
 
 class Matches(models.Model):
     activePlayerID = models.CharField(max_length=10)
+    activePlayerName = models.CharField(max_length = 75)
     opponentID = models.CharField(max_length=10)
     opponentName = models.CharField(max_length = 75)
     activePlayerWin = models.CharField(max_length=1, default = 0)

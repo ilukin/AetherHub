@@ -37,7 +37,7 @@
             <input type="hidden" name="action" value="playerlookup">
             {% csrf_token %}
             {{ lookup_form.as_p }}
-            <button type="submit" name="form2">Search</button>
+            <button type="submit" name="form2">Search</button><button type="submit" name="pairings">Just show me the pairings</button>
         </form>
     </div>
     <div>
@@ -70,6 +70,26 @@
             </table>
         {% endif %}
     </div>
-
+    {% if needpairings %}
+    <div>
+        <table>
+            <tr>
+                Round {{ currentround }}
+            </tr>
+            <tr>
+                <th>Table</th>
+                <th>Player</th>
+                <th>Opponent</th>
+            </tr>
+            {% for stuff in pairings %}
+            <tr>
+                <td>{{stuff.tableNum}}</td>
+                <td>{{stuff.activePlayerName}}</td>
+                <td>{{stuff.opponentName}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %}
 </body>
 </html>

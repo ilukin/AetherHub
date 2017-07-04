@@ -9,7 +9,7 @@ class DocumentForm(forms.ModelForm):
 class PlayerLookupForm(forms.ModelForm):
     class Meta:
         model = LookupField
-        fields = ('DCI_lookup', 'Table_lookup', ) 
+        fields = ('DCI_lookup',) 
 
 class ControlForm(forms.ModelForm):
     class Meta:
