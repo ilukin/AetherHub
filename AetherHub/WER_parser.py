@@ -75,6 +75,7 @@ def loadround(eventid, roundnum):
                objb.draws = child.attrib['draw']
                obj.save()
                objb.save()
+            tablenum = tablenum + 1
         else: #when player has bye
             Matches.objects.get_or_create(activePlayerID = child.attrib['person'],
                                           activePlayerName = Player.objects.get(id = child.attrib['person']).name,
@@ -84,8 +85,8 @@ def loadround(eventid, roundnum):
                                           byeCheck = child.attrib['outcome'],
                                           activePlayerWin = '2',
                                           roundNum = roundnum,
-                                          tableNum = tablenum,)
-        tablenum = tablenum + 1
+                                          tableNum = 0,)
+        
     #print('Load complete')
 
 def findme(DCI, eventid): #list every match connected to a certain player playing in a certain event

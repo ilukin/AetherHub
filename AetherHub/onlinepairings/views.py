@@ -19,6 +19,7 @@ def event_details(request, pk):
     lookup_resultT = '0'
     pairings = '0'
     needpairings = False
+    currentround = Event.objects.get(pk=pk).Current_round
     lookup_form = PlayerLookupForm(prefix='lookup_form')
     form = DocumentForm(prefix='form')
     control_form = ControlForm(prefix='control_form')
@@ -67,13 +68,14 @@ def event_details(request, pk):
 
         if "pairings" in request.POST:       
             needpairings=True
-            currentround = Event.objects.get(pk=pk).Current_round
             pairings = Matches.objects.filter(eventID = pk, roundNum = currentround).order_by('activePlayerName')
-
+    
+    
     return render(request, 'onlinepairings/event_details.html', {
         'needpairings':needpairings,
         'lookup_form':lookup_form,
         'pairings':pairings,
+        'currentround':currentround,
         'form':form,
         'control_form':control_form,
         'myevents':myevents,
